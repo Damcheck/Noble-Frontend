@@ -127,4 +127,37 @@ img[src*="about/"][src$=".webp"] {
   }).observe(document.body, { childList: true, subtree: true });
 })();
 </script>
+
+
+<script>
+// Post-hydration localization override
+(function(){
+  function fix(){
+    var m={"$600k+":"₦80M+","8k":"1K+","130+":"20+","$600k":"₦80M+","Payouts":"Paid Out","Countries":"Nigerian Traders",
+      "Charla Gianiello":"Adebayo S.","Rodrique Raggles":"Yusuf H.","Aya Tanaka":"Chidinma I.","Mateo Rossi":"Ifeanyi J.",
+      "Noah Smith":"Kehinde A.","Pietrek Drescher":"Obinna L.","Raj Patel":"Bukola F.","Sofia Garcia":"Zainab R.",
+      "Lenee Gribbell":"Emeka O.","Karil MacCosty":"Amina B.","Bruis Eade":"Chinedu K.","Alice Thompson":"Fatima A.",
+      "Emily Nguyen":"Oluwaseun D.","Dene Wickwarth":"Blessing N.","Gilbert Curro":"Tunde M.","Janice Gaggen":"Ngozi P.",
+      "$2,341.81":"₦680,000","$1,613.86":"₦450,000","$1,073.83":"₦220,000","$705.08":"₦40,000",
+      "$454.69":"₦120,000","$512.30":"₦150,000","$599.99":"₦180,000","$615.60":"₦190,000",
+      "$620.50":"₦200,000","$725.75":"₦250,000","$735.90":"₦260,000","$813.46":"₦300,000",
+      "$817.15":"₦310,000","$919.00":"₦350,000","$920.40":"₦355,000","$961.59":"₦380,000","$998.00":"₦400,000","$391.57":"₦100,000"};
+    // Walk text nodes
+    var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,null,false);
+    var n;while(n=w.nextNode()){var t=n.textContent.trim();if(m[t])n.textContent=m[t];}
+    // Walk leaf divs (no child divs)
+    document.querySelectorAll("div").forEach(function(el){
+      if(el.children.length===0||!el.querySelector("div")){
+        var t=el.textContent.trim();
+        if(m[t])el.textContent=m[t];
+      }
+    });
+    // Fix img alts
+    document.querySelectorAll("img[alt]").forEach(function(img){if(m[img.alt])img.alt=m[img.alt];});
+  }
+  if(document.readyState==="complete")setTimeout(fix,500);
+  else window.addEventListener("load",function(){setTimeout(fix,500);});
+  setInterval(fix,2000);
+})();
+</script>
 </body></html>
