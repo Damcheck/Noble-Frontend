@@ -172,88 +172,80 @@ img[src*="about/"][src$=".webp"] {
 // Add second reverse-direction payout ticker row
 (function() {
   function addReverseTicker() {
-    // Find the Verified Trader Stats section - look for the ticker container
-    var allDivs = document.querySelectorAll('div');
-    var tickerParent = null;
+    // Find the ticker container rendered by React's HorizontalTicker component
+    // It has inline style: overflow:hidden, display:flex, flexWrap:nowrap
+    var candidates = document.querySelectorAll('div[style]');
+    var tickerContainer = null;
     
-    for (var i = 0; i < allDivs.length; i++) {
-      var div = allDivs[i];
-      // The ticker parent has overflow:hidden and display:flex
-      if (div.style.overflow === 'hidden' && div.style.display === 'flex' && div.style.flexWrap === 'nowrap') {
-        // Check if it contains payout images
-        var imgs = div.querySelectorAll('img[src*="payouts"]');
-        if (imgs.length > 0) {
-          tickerParent = div;
+    for (var i = 0; i < candidates.length; i++) {
+      var el = candidates[i];
+      var s = el.style;
+      if (s.overflow === 'hidden' && s.display === 'flex' && s.flexWrap === 'nowrap') {
+        // Verify it contains payout certificate images (not the small SVG icons)
+        var certImgs = el.querySelectorAll('img[src*="payouts/"][src$=".png"]');
+        if (certImgs.length > 0) {
+          tickerContainer = el;
           break;
         }
       }
     }
     
-    if (!tickerParent) return false;
+    if (!tickerContainer) return false;
     
-    // Check if we already added the reverse ticker
-    if (tickerParent.parentElement.querySelector('.reverse-ticker-added')) return true;
+    // Don't add twice
+    if (document.querySelector('.nf-reverse-ticker')) return true;
     
-    // Create the reverse ticker container
-    var reverseContainer = document.createElement('div');
-    reverseContainer.className = 'reverse-ticker-added';
-    reverseContainer.style.overflow = 'hidden';
-    reverseContainer.style.display = 'flex';
-    reverseContainer.style.flexWrap = 'nowrap';
-    reverseContainer.style.width = '100%';
-    reverseContainer.style.marginTop = '10px';
+    // Deep clone the entire ticker container
+    var clone = tickerContainer.cloneNode(true);
+    clone.className = 'nf-reverse-ticker';
+    clone.style.marginTop = '10px';
     
-    // Create two sets of images (for seamless looping)
-    var images = ['/images/payouts/1.png', '/images/payouts/2.png', '/images/payouts/3.png', '/images/payouts/4.png', '/images/payouts/5.png'];
-    
-    var track1 = document.createElement('div');
-    track1.style.display = 'flex';
-    track1.style.animation = 'reverseScroll 6s linear infinite';
-    
-    var track2 = document.createElement('div');
-    track2.style.display = 'flex';
-    track2.style.animation = 'reverseScroll 6s linear infinite';
-    
-    images.forEach(function(src) {
-      var img1 = document.createElement('img');
-      img1.src = src;
-      img1.alt = src;
-      img1.width = 879;
-      img1.height = 622;
-      img1.className = 'pr-5 sm:rounded-lg object-contain';
-      img1.style.maxHeight = '220px';
-      img1.style.width = 'auto';
-      img1.style.paddingRight = '20px';
-      img1.style.borderRadius = '8px';
-      img1.style.objectFit = 'contain';
-      track1.appendChild(img1);
+    // The original HorizontalTicker has two child divs (track1, track2) that it
+    // animates with the Web Animations API. We need to animate the cloned tracks
+    // in the reverse direction.
+    var tracks = clone.children;
+    if (tracks.length >= 2) {
+      var track1 = tracks[0];
+      var track2 = tracks[1];
       
-      var img2 = img1.cloneNode(true);
-      track2.appendChild(img2);
-    });
-    
-    reverseContainer.appendChild(track1);
-    reverseContainer.appendChild(track2);
-    
-    // Add CSS animation for reverse scrolling
-    if (!document.getElementById('reverse-ticker-style')) {
-      var style = document.createElement('style');
-      style.id = 'reverse-ticker-style';
-      style.textContent = '@keyframes reverseScroll { from { transform: translateX(-100%); } to { transform: translateX(0); } }';
-      document.head.appendChild(style);
+      // Get the total width of one track for the animation distance
+      // Wait a tick for the images to load to get correct width
+      setTimeout(function() {
+        var trackWidth = track1.scrollWidth;
+        if (trackWidth <= 0) trackWidth = track1.offsetWidth;
+        if (trackWidth <= 0) return;
+        
+        var duration = 6000; // Same as original (6e3)
+        var opts = { duration: duration, iterations: 1, fill: 'forwards', direction: 'reverse' };
+        
+        // Animate both tracks continuously in reverse
+        function animateLoop() {
+          // Track 1: translateX(0) -> translateX(-width) but reversed = right-to-left becomes left-to-right
+          var kf1a = [{ transform: 'translateX(0px)' }, { transform: 'translateX(' + (-trackWidth) + 'px)' }];
+          var kf1b = [{ transform: 'translateX(' + trackWidth + 'px)' }, { transform: 'translateX(0px)' }];
+          
+          var kf2a = [{ transform: 'translateX(0px)' }, { transform: 'translateX(' + (-trackWidth) + 'px)' }];
+          var kf2b = [{ transform: 'translateX(' + (-trackWidth) + 'px)' }, { transform: 'translateX(' + (-2 * trackWidth) + 'px)' }];
+          
+          Promise.all([
+            new Promise(function(r) { var a = track1.animate(kf1a, opts); a.onfinish = function() { var b = track1.animate(kf1b, opts); b.onfinish = r; }; }),
+            new Promise(function(r) { var a = track2.animate(kf2a, opts); a.onfinish = function() { var b = track2.animate(kf2b, opts); b.onfinish = r; }; })
+          ]).then(animateLoop);
+        }
+        
+        animateLoop();
+      }, 500);
     }
     
     // Insert after the original ticker
-    tickerParent.parentElement.appendChild(reverseContainer);
+    tickerContainer.parentElement.appendChild(clone);
     return true;
   }
   
-  // Try repeatedly until React has rendered the ticker
+  // Poll until React renders the ticker
   var attempts = 0;
   var interval = setInterval(function() {
-    if (addReverseTicker() || attempts > 30) {
-      clearInterval(interval);
-    }
+    if (addReverseTicker() || attempts > 30) clearInterval(interval);
     attempts++;
   }, 500);
 })();
