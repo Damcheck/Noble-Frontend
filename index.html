@@ -168,4 +168,94 @@ img[src*="about/"][src$=".webp"] {
   setInterval(fix,2000);
 })();
 </script>
+<script>
+// Add second reverse-direction payout ticker row
+(function() {
+  function addReverseTicker() {
+    // Find the Verified Trader Stats section - look for the ticker container
+    var allDivs = document.querySelectorAll('div');
+    var tickerParent = null;
+    
+    for (var i = 0; i < allDivs.length; i++) {
+      var div = allDivs[i];
+      // The ticker parent has overflow:hidden and display:flex
+      if (div.style.overflow === 'hidden' && div.style.display === 'flex' && div.style.flexWrap === 'nowrap') {
+        // Check if it contains payout images
+        var imgs = div.querySelectorAll('img[src*="payouts"]');
+        if (imgs.length > 0) {
+          tickerParent = div;
+          break;
+        }
+      }
+    }
+    
+    if (!tickerParent) return false;
+    
+    // Check if we already added the reverse ticker
+    if (tickerParent.parentElement.querySelector('.reverse-ticker-added')) return true;
+    
+    // Create the reverse ticker container
+    var reverseContainer = document.createElement('div');
+    reverseContainer.className = 'reverse-ticker-added';
+    reverseContainer.style.overflow = 'hidden';
+    reverseContainer.style.display = 'flex';
+    reverseContainer.style.flexWrap = 'nowrap';
+    reverseContainer.style.width = '100%';
+    reverseContainer.style.marginTop = '10px';
+    
+    // Create two sets of images (for seamless looping)
+    var images = ['/images/payouts/1.png', '/images/payouts/2.png', '/images/payouts/3.png', '/images/payouts/4.png', '/images/payouts/5.png'];
+    
+    var track1 = document.createElement('div');
+    track1.style.display = 'flex';
+    track1.style.animation = 'reverseScroll 6s linear infinite';
+    
+    var track2 = document.createElement('div');
+    track2.style.display = 'flex';
+    track2.style.animation = 'reverseScroll 6s linear infinite';
+    
+    images.forEach(function(src) {
+      var img1 = document.createElement('img');
+      img1.src = src;
+      img1.alt = src;
+      img1.width = 879;
+      img1.height = 622;
+      img1.className = 'pr-5 sm:rounded-lg object-contain';
+      img1.style.maxHeight = '220px';
+      img1.style.width = 'auto';
+      img1.style.paddingRight = '20px';
+      img1.style.borderRadius = '8px';
+      img1.style.objectFit = 'contain';
+      track1.appendChild(img1);
+      
+      var img2 = img1.cloneNode(true);
+      track2.appendChild(img2);
+    });
+    
+    reverseContainer.appendChild(track1);
+    reverseContainer.appendChild(track2);
+    
+    // Add CSS animation for reverse scrolling
+    if (!document.getElementById('reverse-ticker-style')) {
+      var style = document.createElement('style');
+      style.id = 'reverse-ticker-style';
+      style.textContent = '@keyframes reverseScroll { from { transform: translateX(-100%); } to { transform: translateX(0); } }';
+      document.head.appendChild(style);
+    }
+    
+    // Insert after the original ticker
+    tickerParent.parentElement.appendChild(reverseContainer);
+    return true;
+  }
+  
+  // Try repeatedly until React has rendered the ticker
+  var attempts = 0;
+  var interval = setInterval(function() {
+    if (addReverseTicker() || attempts > 30) {
+      clearInterval(interval);
+    }
+    attempts++;
+  }, 500);
+})();
+</script>
 </body></html>
