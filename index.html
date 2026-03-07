@@ -89,8 +89,21 @@ img[src*="about/"][src$=".webp"] {
         video.autoplay = true;
         video.loop = true;
         video.muted = true;
+        video.defaultMuted = true;
         video.playsInline = true;
+        video.setAttribute('autoplay', '');
+        video.setAttribute('loop', '');
+        video.setAttribute('muted', '');
+        video.setAttribute('playsinline', '');
         video.className = 'hero-video-bg';
+        
+        // Attempt to force play in case of Safari issues
+        setTimeout(function() {
+            var playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(function(e) { console.log("Autoplay failed:", e); });
+            }
+        }, 100);
         
         // Original CSS preferred by the user
         video.style.position = 'absolute';
