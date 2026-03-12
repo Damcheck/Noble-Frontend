@@ -363,7 +363,7 @@ cp /path/to/new-video.webm "images/NB bg.webm"
 
 ### ⚠️ Payout Certificate Images
 
-The payout certificate images in `images/payouts/` still display **"EmpireFunded"** branding because they are raster images with baked-in text. These need to be replaced with Noble Funded branded certificates using Photoshop or similar.
+The payout certificate images in `images/payouts/` still display **the old** branding because they are raster images with baked-in text. These need to be replaced with Noble Funded branded certificates using Photoshop or similar.
 
 ---
 
@@ -442,7 +442,7 @@ Add this just before `</body>` in ALL 5 HTML files:
 
 3. **React hydration** — The site uses React hydration (JS takes over the HTML after page load). If the HTML and JS content don't match, React may "flash" old content. Always match changes in BOTH the HTML and the JS file.
 
-4. **Payout certificates** — The images in `/images/payouts/` still show "EmpireFunded" text. These are raster JPG images and need manual replacement with new Noble Funded branded certificates.
+4. **Payout certificates** — The images in `/images/payouts/` still show the old text. These are raster JPG images and need manual replacement with new Noble Funded branded certificates.
 
 5. **Documents folder** — The `/documents/` folder should contain `tnc.pdf`, `privacy.pdf`, `aml.pdf`, `prohibited.pdf`. If these are missing, create and add them.
 
