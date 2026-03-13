@@ -179,61 +179,63 @@
     })();
     }
 
-    // Account size text → checkout plan ID mapping
-    var PLAN_MAP_NOBLE = {
-        '\u20a6200,000': 'ngn-200k', '\u20a6400,000': 'ngn-400k', '\u20a6600,000': 'ngn-600k',
-        '\u20a6800,000': 'ngn-800k', '\u20a61,000,000': 'ngn-1m', '\u20a63,000,000': 'ngn-3m',
-        '$5K': 'usd-5k', '$10K': 'usd-10k', '$25K': 'usd-25k',
-        '$50K': 'usd-50k', '$100K': 'usd-100k', '$200K': 'usd-200k',
+    // Map the unique Challenge Fee shown above the button to the correct plan
+    var PRICE_TO_PLAN_MAP = {
+        '\u20a610,000': 'ngn-200k', '\u20a619,000': 'ngn-400k', '\u20a629,000': 'ngn-600k',
+        '\u20a639,000': 'ngn-800k', '\u20a654,000': 'ngn-1m', '\u20a6190,000': 'ngn-3m',
+        '$29.99': 'usd-5k', '$59.99': 'usd-10k', '$134.99': 'usd-25k',
+        '$219.99': 'usd-50k', '$379.99': 'usd-100k', '$749.99': 'usd-200k'
     };
 
-    function getPlanFromCard(cardEl) {
+    function getPlanFromPriceCard(cardEl) {
         var text = cardEl ? (cardEl.innerText || cardEl.textContent || '') : '';
-        var keys = Object.keys(PLAN_MAP_NOBLE);
+        var keys = Object.keys(PRICE_TO_PLAN_MAP);
         for (var i = 0; i < keys.length; i++) {
-            if (text.indexOf(keys[i]) !== -1) return PLAN_MAP_NOBLE[keys[i]];
+            if (text.indexOf(keys[i]) !== -1) return PRICE_TO_PLAN_MAP[keys[i]];
         }
         return null;
     }
 
-    function patchGetFundedButtons() {
-        // Find ALL <a> tags whose text contains "get funded" (case-insensitive)
-        var allLinks = document.querySelectorAll('a');
-        allLinks.forEach(function(a) {
-            var txt = (a.textContent || a.innerText || '').trim().toLowerCase();
-            if (txt.indexOf('get funded') === -1) return;
-            if (a.getAttribute('data-checkout-patched') === '1') return;
-            a.setAttribute('data-checkout-patched', '1');
+    function setupGlobalCheckoutInterceptor() {
+        if (window._nobleCheckoutInterceptorActive) return;
+        window._nobleCheckoutInterceptorActive = true;
 
-            // Walk up to find pricing card with account size
-            var node = a;
+        window.addEventListener('click', function(e) {
+            var target = e.target;
+            var linkNode = null;
+            while (target && target !== document) {
+                if ((target.tagName === 'A' || target.tagName === 'BUTTON') && 
+                    (target.textContent || target.innerText || '').trim().toLowerCase().indexOf('get funded') !== -1 &&
+                    (target.textContent || target.innerText || '').trim().toLowerCase().indexOf('get funded now') === -1) {
+                    linkNode = target;
+                    break;
+                }
+                target = target.parentNode;
+            }
+            if (!linkNode) return;
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Walk up max 7 levels to find the price box
+            var node = linkNode;
             var plan = null;
-            for (var i = 0; i < 20; i++) {
-                if (!node.parentElement) break;
+            for (var i = 0; i < 7; i++) {
+                if (!node || !node.parentElement) break;
                 node = node.parentElement;
-                if (node.tagName === 'BODY') break;
-                plan = getPlanFromCard(node);
+                plan = getPlanFromPriceCard(node);
                 if (plan) break;
             }
 
-            // Directly rewrite href so React never handles the old URL
             var checkoutUrl = 'https://noble-funded-checkout.vercel.app' + (plan ? '?plan=' + plan : '');
-            a.href = checkoutUrl;
-            a.target = '_blank';
-            a.rel = 'noopener noreferrer';
-            // Belt-and-suspenders: also block original handler in capture phase
-            a.addEventListener('click', function(e) {
-                e.stopPropagation();
-                window.open(checkoutUrl, '_blank');
-                e.preventDefault();
-            }, true);
-        });
+            window.open(checkoutUrl, '_blank');
+        }, true);
     }
 
     function applyAll() {
         nukeIntercom();
         applyHeaderFooterFixes();
-        patchGetFundedButtons();
+        setupGlobalCheckoutInterceptor();
         if (typeof replaceFaq !== 'undefined') replaceFaq();
         if (typeof replaceRules !== 'undefined') replaceRules();
     }
