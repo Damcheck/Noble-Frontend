@@ -1,0 +1,122 @@
+
+<script>
+// ---------- GLOBAL INJECTIONS V8 (STYLING FIXES) ---------- //
+(function() {
+    const path = window.location.pathname;
+
+    function nukeIntercom() {
+        var iframes = document.querySelectorAll('iframe');
+        for (var i = 0; i < iframes.length; i++) {
+            if (iframes[i].name === 'intercom-launcher-frame' || iframes[i].className.includes('intercom')) {
+                iframes[i].remove();
+            }
+        }
+    }
+
+    function applyHeaderFooterFixes() {
+        // 1. WhatsApp Button
+        if (!document.getElementById('wa-float-noble')) {
+            var waBtn = document.createElement('a');
+            waBtn.id = 'wa-float-noble';
+            waBtn.href = 'https://wa.me/2349070552755';
+            waBtn.target = '_blank';
+            waBtn.style.position = 'fixed';
+            waBtn.style.bottom = '20px';
+            waBtn.style.right = '20px';
+            waBtn.style.backgroundColor = '#25D366';
+            waBtn.style.color = 'white';
+            waBtn.style.borderRadius = '50px';
+            waBtn.style.padding = '10px 20px';
+            waBtn.style.fontSize = '16px';
+            waBtn.style.fontWeight = 'bold';
+            waBtn.style.boxShadow = '2px 2px 5px rgba(0,0,0,0.3)';
+            waBtn.style.zIndex = '10000';
+            waBtn.style.textDecoration = 'none';
+            waBtn.innerHTML = 'WhatsApp Support';
+            document.body.appendChild(waBtn);
+        }
+
+        // 2. Remove YouTube/Telegram/WhatsApp from Socials
+        var footers = document.querySelectorAll('footer');
+        footers.forEach(f => {
+            var links = f.querySelectorAll('a');
+            links.forEach(a => {
+                const text = (a.textContent || '').trim().toLowerCase();
+                if (text === 'youtube' || text === 'telegram' || text === 'whatsapp' ||
+                    a.href.includes('youtube.com') || a.href.includes('t.me') || a.href.includes('wa.me')) {
+                    a.style.display = 'none';
+                }
+            });
+        });
+
+        // 3. Add "Sign Up" next to "Login" (Matches original styling)
+        var allLogins = document.querySelectorAll('a[href*="dashboard.noblefunded"]');
+        allLogins.forEach(login => {
+            // Check if it's header or footer
+            var isFooter = login.closest('footer') !== null;
+            
+            // We want to skip if we already injected directly next to it
+            // We also shouldn't duplicate if another script pass already created '#injected-signup-btn...'
+            if (!login.nextElementSibling || !login.nextElementSibling.className.includes('injected-signup')) {
+                
+                var signup = document.createElement('a');
+                signup.href = 'https://dashboard.noblefunded.com/register';
+                signup.target = '_blank';
+                signup.rel = 'noopener noreferrer';
+                signup.textContent = 'Sign Up';
+                signup.className = login.className + ' injected-signup'; // Copy exact class from the login link
+
+                // If Header, they sit side by side
+                if (!isFooter) {
+                    if (login.parentElement) {
+                        login.parentElement.style.display = 'flex';
+                        login.parentElement.style.alignItems = 'center';
+                        login.parentElement.style.gap = '20px'; // Space them evenly
+                        login.parentNode.insertBefore(signup, login.nextSibling);
+                    }
+                } 
+                // If Footer, they sit in a column
+                else {
+                    if (login.parentElement) {
+                        login.parentNode.insertBefore(signup, login.nextSibling);
+                    }
+                }
+            }
+        });
+    }
+
+    function applyAll() {
+        nukeIntercom();
+        applyHeaderFooterFixes();
+        
+        if (path.includes('/faq')) {
+            if (typeof replaceFaq !== 'undefined') replaceFaq();
+        }
+        if (path.includes('/rule')) {
+            if (typeof replaceRules !== 'undefined') replaceRules();
+        }
+    }
+
+    if (document.readyState === 'loading') {    
+        document.addEventListener('DOMContentLoaded', applyAll);
+    } else {
+        applyAll();
+    }
+
+    // Keep applying the fixes constantly to defeat any delayed hydration
+    setInterval(applyAll, 500);
+
+    var observer = new MutationObserver(applyAll);
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+})();
+// ---------- END GLOBAL INJECTIONS V8 ---------- //
+</script>
+<style>
+.intercom-lightweight-app, .intercom-launcher, .intercom-launcher-frame,
+iframe[name="intercom-launcher-frame"], .intercom-namespace,
+[class*="intercom"] { display: none !important; visibility: hidden !important; pointer-events: none !important; }
+
+a[href*="/affiliate"], a[href*="Referral Program"] {
+    display: none !important; visibility: hidden !important; width: 0 !important; height: 0 !important; pointer-events: none !important;
+}
+</style>
