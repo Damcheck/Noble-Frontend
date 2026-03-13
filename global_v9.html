@@ -197,26 +197,35 @@
     }
 
     function patchGetFundedButtons() {
-        var allEls = document.querySelectorAll('a:not([data-checkout-patched]), button:not([data-checkout-patched])');
-        allEls.forEach(function(el) {
-            var txt = (el.textContent || el.innerText || '').trim();
-            if (txt.indexOf('Get Funded Now') === -1 && txt !== 'Get Funded') return;
-            el.setAttribute('data-checkout-patched', '1');
-            el.addEventListener('click', function(e) {
-                var node = el;
-                for (var i = 0; i < 15; i++) {
-                    if (!node.parentElement) break;
-                    node = node.parentElement;
-                    if (node.tagName === 'SECTION' || node.tagName === 'BODY') break;
-                    var plan = getPlanFromCard(node);
-                    if (plan) {
-                        e.preventDefault(); e.stopPropagation();
-                        window.open('https://noble-funded-checkout.vercel.app?plan=' + plan, '_blank');
-                        return;
-                    }
-                }
-                e.preventDefault(); e.stopPropagation();
-                window.open('https://noble-funded-checkout.vercel.app', '_blank');
+        // Find ALL <a> tags whose text contains "get funded" (case-insensitive)
+        var allLinks = document.querySelectorAll('a');
+        allLinks.forEach(function(a) {
+            var txt = (a.textContent || a.innerText || '').trim().toLowerCase();
+            if (txt.indexOf('get funded') === -1) return;
+            if (a.getAttribute('data-checkout-patched') === '1') return;
+            a.setAttribute('data-checkout-patched', '1');
+
+            // Walk up to find pricing card with account size
+            var node = a;
+            var plan = null;
+            for (var i = 0; i < 20; i++) {
+                if (!node.parentElement) break;
+                node = node.parentElement;
+                if (node.tagName === 'BODY') break;
+                plan = getPlanFromCard(node);
+                if (plan) break;
+            }
+
+            // Directly rewrite href so React never handles the old URL
+            var checkoutUrl = 'https://noble-funded-checkout.vercel.app' + (plan ? '?plan=' + plan : '');
+            a.href = checkoutUrl;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            // Belt-and-suspenders: also block original handler in capture phase
+            a.addEventListener('click', function(e) {
+                e.stopPropagation();
+                window.open(checkoutUrl, '_blank');
+                e.preventDefault();
             }, true);
         });
     }
