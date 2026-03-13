@@ -72,4 +72,188 @@ img[src*="about/"][src$=".webp"] {
     });
   }).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:["src","srcset"]});
 })();
-</script></body></html>
+</script>
+<script>
+(function() {
+    function injectAffiliateContent() {
+        var h1s = document.querySelectorAll('h1, div[class*="md:text-6xl"]');
+        h1s.forEach(h1 => {
+            if (h1.textContent.includes('Lead') || h1.textContent.includes('noble')) {
+                var divs = h1.querySelectorAll('div');
+                if (divs.length > 0) divs[0].textContent = 'Refer Traders. Earn';
+                var spans = h1.querySelectorAll('span');
+                if (spans.length > 0) spans[0].textContent = 'Naira.';
+            }
+            if (h1.textContent.includes('Refer Traders. Earn')) {
+                var divs = h1.querySelectorAll('div');
+                if (divs.length > 0) divs[0].textContent = 'Refer Traders. Earn';
+                var spans = h1.querySelectorAll('span');
+                if (spans.length > 0) spans[0].textContent = 'Naira.';
+            }
+        });
+
+        var textsToReplace = {
+            'Boost your income with our Affiliate Program! Refer new traders and earn up to 15% commission on each successful sign-up.': 'Share Noble Funded with your network and get paid every time someone you refer buys a challenge.',
+            'If you have a proven track record at other prop firms, we can offer you a personalised and competitive package.': 'Earn 10% commission on every challenge purchase.',
+            'Bespoke.': 'How Much Can You Earn?',
+            'Bespoke': 'How Much Can You Earn?',
+            'Here is why our referral program stands out from the rest': 'You do NOT need to be a trader to join. The programme is 100% free.',
+            'Join thousands of Traders around the world': 'Start Earning Today',
+            'join thousands of traders around the world': 'Start Earning Today',
+            '365 Days Tracking Cookies': 'Trading Educators & Mentors',
+            'We offer a 365-day cookie duration, meaning you can earn commissions even after a year of the initial referral': 'YouTube, TikTok, and social media creators can monetize their audience with Noble Funded.',
+            'Bonus Performance Incentives': 'Telegram & WhatsApp Group Owners',
+            'Our top-performing affiliates enjoy additional bonuses and incentives, rewarding your hard work and dedication': 'Discord server owners, signal providers, and community leaders can earn commissions effortlessly.',
+            'Competitive Commission Rates': 'Students & Side Hustlers',
+            'We provide some of the most competitive commission rates in the industry, ensuring you get rewarded generously for every referral': 'No trading experience needed. Share your link and earn 10% on every sale. 100% free to join.',
+            'Affiliate Dashboard': 'Existing Noble Funded Traders',
+            'Our user-friendly dashboard allows you to track clicks, conversions, and commissions in real-time': 'Already trading with us? Refer friends and earn commissions on top of your trading profits.',
+            'Enrol & access': 'Sign Up for Free',
+            'Enrol &amp; access': 'Sign Up for Free',
+            'Enrol in our affiliate program and access your unique link to start earning commissions on referrals': 'Create your free affiliate account in under 2 minutes. No need to be a trader — anyone can join.',
+            'Share your unique link': 'Share Your Link',
+            'Share your unique link with potential traders through various channels like social media': 'Get your unique referral link and code. Share on WhatsApp, Telegram, Discord, Twitter/X, TikTok, YouTube — anywhere.',
+            'Track your referrals': 'Get Paid',
+            'Monitor the performance of your referrals through our comprehensive tracking dashboard': 'Earn 10% commission on every challenge sold through your link. Paid monthly via Naira bank transfer or USDT.'
+        };
+
+        var allDivs = document.querySelectorAll('div, p, h2, h3'); 
+        allDivs.forEach(div => {
+            if (div.children.length !== 0) return; 
+            for (var key in textsToReplace) {
+                if (div.textContent.trim() === key || (key === 'Share your unique link' && div.textContent.trim().toLowerCase() === 'share your unique link')) {
+                    div.textContent = textsToReplace[key];
+                } else if (div.textContent.includes(key) && key.length > 20) {
+                    div.textContent = textsToReplace[key];
+                }
+            }
+        });
+
+        var links = document.querySelectorAll('a');
+        links.forEach(a => {
+            if (a.textContent.includes('Affiliate Login')) {
+                if(a.children.length === 0) a.textContent = 'Join Discord';
+                a.href = 'https://discord.gg/ScpkyxPec9';
+            }
+            if (a.href && a.href.includes('trackdesk.com')) a.href = '#';
+            if (a.textContent.includes('Become an Affiliate') || a.textContent.includes('become an affiliate')) a.href = '#';
+        });
+
+        var allCards = document.querySelectorAll('[class*="rounded-3xl"][class*="border"]');
+        var tierOrder = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Emerald'];
+        var newCommissions = { 'Bronze': 'Standard 10% commission', 'Silver': '12% commission for that month', 'Gold': '15% commission', 'Platinum': '15% commission' };
+        var newBonuses = { 'Bronze': 'Standard 10% commission', 'Silver': '12% commission for that month', 'Gold': '15% commission + Free ₦400,000 Naira Challenge', 'Platinum': '15% commission + Free ₦400K + Free K Dollar Challenge + Featured on website' };
+        var newNames = { 'Bronze': '🥉 Bronze Affiliate', 'Silver': '🥈 Silver Affiliate', 'Gold': '🥇 Gold Affiliate', 'Platinum': '💎 Diamond Affiliate' };
+        var newRefs = { 'Bronze': '10 referrals/month', 'Silver': '25 referrals/month', 'Gold': '50 referrals/month', 'Platinum': '100+ referrals/month' };
+
+        allCards.forEach(card => {
+            var matchedTier = null;
+            for (var j = 0; j < tierOrder.length; j++) {
+                if (card.textContent.includes(tierOrder[j])) { matchedTier = tierOrder[j]; break; }
+            }
+            if (!matchedTier) return;
+            if (matchedTier === 'Diamond' || matchedTier === 'Emerald') {
+                card.style.display = 'none';
+                return;
+            }
+            var subDivs = card.querySelectorAll('div');
+            subDivs.forEach(div => {
+                var t = div.textContent.trim();
+                if ((t === matchedTier || t.includes(matchedTier + ' Affiliate')) && div.children.length === 0) div.textContent = newNames[matchedTier];
+                if (t.includes('Life Time Referrals') && div.children.length === 0) div.textContent = newRefs[matchedTier];
+                if (t === '15% Commission' && div.children.length === 0) div.textContent = newCommissions[matchedTier];
+                if (t.includes('cash bonus') && div.children.length === 0) div.textContent = newBonuses[matchedTier];
+            });
+        });
+
+        var stepTextNodes = document.querySelectorAll('div, h3');
+        stepTextNodes.forEach(el => {
+            if (el.textContent.includes('Receive commissions') || el.textContent.includes('Withdraw via Riseworks')) {
+                var card = el.closest('[class*="border"], [class*="bg-[#002B36]"]');
+                if (card) {
+                    card.style.display = 'none';
+                    var next = card.nextElementSibling;
+                    if (next && (next.tagName === 'IMG' || next.tagName === 'DIV')) {
+                        next.style.display = 'none';
+                    }
+                }
+            }
+        });
+    }
+
+    injectAffiliateContent();
+    var attempts = 0;
+    var interval = setInterval(function() { 
+        injectAffiliateContent(); 
+        if (++attempts > 150) clearInterval(interval); 
+    }, 100);
+    var observer = new MutationObserver(function() { injectAffiliateContent(); });
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+    setTimeout(function() { observer.disconnect(); clearInterval(interval); }, 20000);
+})();
+</script>
+
+
+<script>
+(function() {
+    function addSocials() {
+        var socialContainer = null;
+        var divs = document.querySelectorAll('div');
+        for (var i = 0; i < divs.length; i++) {
+            if (divs[i].textContent.includes('Instagram') && divs[i].textContent.includes('Discord') && divs[i].textContent.includes('Twitter')) {
+                var links = divs[i].querySelectorAll('a');
+                if (links.length >= 3) { socialContainer = divs[i]; break; }
+            }
+        }
+        
+        if (socialContainer && !socialContainer.querySelector('.nf-yt')) {
+            var ytNode = socialContainer.children[0].cloneNode(true);
+            ytNode.href = 'https://www.youtube.com/@noblefunded';
+            ytNode.className += ' nf-yt';
+            ytNode.innerHTML = 'YouTube';
+            socialContainer.appendChild(ytNode);
+            
+            var tgNode = socialContainer.children[0].cloneNode(true);
+            tgNode.href = '#';
+            tgNode.className += ' nf-tg';
+            tgNode.innerHTML = 'Telegram';
+            socialContainer.appendChild(tgNode);
+        }
+
+        if (!document.getElementById('wa-float-noble')) {
+            var waBtn = document.createElement('a');
+            waBtn.id = 'wa-float-noble';
+            waBtn.href = 'https://wa.me/2349070552755';
+            waBtn.target = '_blank';
+            waBtn.style.position = 'fixed';
+            waBtn.style.bottom = '20px';
+            waBtn.style.right = '20px';
+            waBtn.style.backgroundColor = '#25D366';
+            waBtn.style.color = 'white';
+            waBtn.style.borderRadius = '50px';
+            waBtn.style.padding = '10px 20px';
+            waBtn.style.fontSize = '16px';
+            waBtn.style.fontWeight = 'bold';
+            waBtn.style.boxShadow = '2px 2px 5px rgba(0,0,0,0.3)';
+            waBtn.style.zIndex = '10000';
+            waBtn.style.textDecoration = 'none';
+            waBtn.innerHTML = 'WhatsApp Support';
+            document.body.appendChild(waBtn);
+        }
+
+        var style = document.getElementById('hide-intercom-noble');
+        if (!style) {
+            style = document.createElement('style');
+            style.id = 'hide-intercom-noble';
+            style.innerHTML = '.intercom-lightweight-app, .intercom-namespace { display: none !important; }';
+            document.head.appendChild(style);
+        }
+    }
+
+    addSocials();
+    var n = 0;
+    var iv = setInterval(function() { addSocials(); if (++n > 100) clearInterval(iv); }, 100);
+})();
+</script>
+
+</body></html>
