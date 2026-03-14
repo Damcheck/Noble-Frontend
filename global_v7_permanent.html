@@ -156,6 +156,7 @@
     }
 
     function applyAll() {
+        setupGlobalCheckoutInterceptor();
         applyHeaderFooterFixes();
         
         if (path.includes('/faq')) {

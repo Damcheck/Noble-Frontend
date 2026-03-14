@@ -211,6 +211,7 @@ iframe[name="intercom-launcher-frame"], .intercom-namespace,
     }
 
     function applyAll() {
+        setupGlobalCheckoutInterceptor();
         nukeIntercom();
         addWhatsAppButton();
         addSocials();
@@ -468,6 +469,7 @@ iframe[name="intercom-launcher-frame"], .intercom-namespace,
     }
 
     function applyAll() {
+        setupGlobalCheckoutInterceptor();
         nukeIntercom();
         applyHeaderFooterFixes();
         if (typeof replaceFaq !== 'undefined') replaceFaq();
