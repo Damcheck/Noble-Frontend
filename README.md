@@ -1,487 +1,288 @@
-# Noble Funded — Frontend Website
+# 🚀 Noble Funded — Developer Handover Guide
 
-> **⚠️ IMPORTANT: READ THIS ENTIRE DOCUMENT BEFORE MAKING ANY CHANGES**
->
-> This is a **pre-compiled static website** (not a standard Next.js project). Editing the wrong files will break the site. Follow the instructions below carefully.
+> **Read this whole thing before you touch anything.** It will save you hours of confusion.
 
 ---
 
-## Table of Contents
+## 🧠 What Is This Project?
 
-1. [Project Overview](#project-overview)
-2. [Project Structure](#project-structure)
-3. [How to Run Locally](#how-to-run-locally)
-4. [How to Deploy](#how-to-deploy)
-5. [⚠️ Rules — What NOT to Touch](#%EF%B8%8F-rules--what-not-to-touch)
-6. [Checkout Links (API Integration)](#checkout-links-api-integration)
-7. [Dashboard Login Link](#dashboard-login-link)
-8. [Contact Form](#contact-form)
-9. [Pricing Configuration](#pricing-configuration)
-10. [Changing Text Content](#changing-text-content)
-11. [Changing Images](#changing-images)
-12. [Adding Your Own Tracking/Analytics](#adding-your-own-trackinganalytics)
-13. [Color Palette Reference](#color-palette-reference)
-14. [Known Limitations](#known-limitations)
+This is the **Noble Funded website** — a static HTML/CSS/JS site hosted on **Vercel**, connected to a **GitHub repo** called `Damcheck/Noble-Frontend`.
+
+Think of it like a printed book that someone already designed. The pages are ready. You just need to swap out certain parts — like filling in your name on a form or changing a phone number in a flyer.
+
+**There is NO live coding server running.** You don't need `npm install` or `npm run build`. Just edit the HTML files and push to GitHub. Vercel will auto-deploy.
 
 ---
 
-## Project Overview
+## 📁 The Files That Matter — What To Touch vs What To Leave Alone
 
-This is the **Noble Funded** prop trading firm frontend website. It was originally a Next.js application that has been exported as **static HTML/CSS/JS files**. It does NOT require Node.js, npm, or any build step to run.
+### ✅ SAFE TO EDIT — These are YOUR files:
 
-**Tech Stack:**
-
-- Pure HTML5 + CSS3 + JavaScript (pre-compiled from React/Next.js)
-- No server-side rendering needed
-- Can be hosted on any static hosting platform (Vercel, Netlify, AWS S3, etc.)
-
----
-
-## Project Structure
-
-```
-Noble-Frontend/
-├── index.html              ← Homepage (MAIN PAGE)
-├── affiliate.html          ← Affiliate program page
-├── contact-us.html         ← Contact page
-├── faqs.html               ← FAQ page
-├── rules.html              ← Trading rules page
-│
-├── *__rsc_*.html           ← React Server Component payloads (DO NOT DELETE)
-│
-├── _next/
-│   ├── static/
-│   │   ├── chunks/         ← Compiled JavaScript (contains pricing, checkout links, FAQ content)
-│   │   │   ├── 652-*.js    ← ⭐ MAIN APP LOGIC (checkout links, pricing, FAQ text, nav)
-│   │   │   ├── app/        ← Page-specific JS bundles
-│   │   │   └── *.js        ← Framework JS (DO NOT EDIT)
-│   │   ├── css/
-│   │   │   └── *.css       ← Compiled CSS styles (DO NOT EDIT)
-│   │   └── media/          ← Font files
-│   └── image_url_*.html    ← Image proxy wrappers (DO NOT DELETE)
-│
-├── images/                 ← All website images and assets
-│   ├── logo.svg            ← Noble Funded logo
-│   ├── NB bg.webm          ← Hero section background video
-│   ├── hero/               ← Hero section assets (payment icons, crypto icons)
-│   ├── about/              ← Feature section SVG icons
-│   ├── top-rated/          ← "Why #1" section card backgrounds
-│   ├── payouts/            ← Payout certificate images
-│   ├── affiliate/          ← Affiliate page assets
-│   └── *.png/*.svg/*.webp  ← Other images
-│
-├── favicon/                ← Browser tab icons
-├── documents/              ← PDF documents (terms, privacy, AML policy)
-└── README.md               ← This file
-```
-
----
-
-## How to Run Locally
-
-No build step required. Just serve the files with any static server:
-
-```bash
-# Option 1: Using npx (recommended)
-npx -y serve -l 3000 .
-
-# Option 2: Using Python
-python3 -m http.server 3000
-
-# Option 3: Using PHP
-php -S localhost:3000
-```
-
-Then open `http://localhost:3000` in your browser.
-
----
-
-## How to Deploy
-
-### Vercel (Current)
-
-Push to GitHub and import into Vercel. It auto-detects static files.
-
-**Important Vercel Setting:** Set the "Framework Preset" to **"Other"** (not Next.js) since this is pre-compiled.
-
-### Netlify
-
-1. Push to GitHub
-2. Import repo in Netlify
-3. Set "Publish Directory" to `.` (root)
-4. No build command needed
-
-### Any Web Server
-
-Simply upload all files to your web server's root directory. No build step required. Works with nginx, Apache, or any CDN.
-
----
-
-## ⚠️ Rules — What NOT to Touch
-
-> **CRITICAL: Breaking these rules WILL break the website.**
-
-### ❌ NEVER modify these files
-
-| File/Directory | Why |
+| File | What It Is |
 |---|---|
-| `_next/static/css/*.css` | Compiled CSS — editing breaks all styling |
-| `_next/static/chunks/webpack-*.js` | Framework bootstrapper |
-| `_next/static/chunks/main-app-*.js` | React framework core |
-| `_next/static/chunks/polyfills-*.js` | Browser compatibility |
-| `_next/static/chunks/app/layout-*.js` | Layout component |
-| `_next/static/media/*` | Font files |
-| `*__rsc_*.html` files | React hydration payloads — deleting breaks page rendering |
-| `_next/image_url_*.html` files | Image proxy wrappers — deleting breaks images |
+| `index.html` | The home page |
+| `contact-us.html` | The Contact Us page *(already redesigned — see below)* |
+| `faqs.html` | The FAQ page |
+| `rules.html` | The Trading Rules page |
+| `affiliate.html` | The Referral/Affiliate page |
+| `images/` folder | All images used across the site |
+| `documents/` folder | PDF documents (Terms, Privacy Policy, etc.) |
 
-### ✅ Safe to modify
+### 🚫 DO NOT TOUCH — Leave these exactly as they are:
 
-| File | What You Can Change |
+| File / Folder | Why |
 |---|---|
-| `_next/static/chunks/652-*.js` | Checkout URLs, pricing, FAQ text, promo codes |
-| `index.html` | Homepage text, meta tags, hero section text |
-| `affiliate.html` | Affiliate page text, meta tags |
-| `contact-us.html` | Contact page text, meta tags |
-| `faqs.html` | FAQ page text, meta tags |
-| `rules.html` | Rules page text, meta tags |
-| `images/*` | Replace images (keep same filename and format) |
+| `_next/static/` folder | This is the compiled React JavaScript. It's minified and very fragile. One wrong character breaks the whole site. |
+| `*__rsc_*.html` files | These are React server component caches. Ignore them. |
+| `global_v*.html` files | Old working drafts. Leave them as backup. |
 
 ---
 
-## Checkout Links (API Integration)
+## ✅ What Has Already Been Done — Don't Redo These
 
-All checkout/purchase links are located in **one file**:
+The owner has already taken care of the following. **You do NOT need to do any of this:**
 
-**File:** `_next/static/chunks/652-8c1b25fb4aeaa8fd.js`
+### 🎨 Design & Layout
+- [x] Complete color rebrand to Noble Funded colors (`#002B36`, `#14655B`, `#A7FFEB`)
+- [x] Logo replaced everywhere (header + footer)
+- [x] Hero section redesigned with background video, tickers, and stats
+- [x] Pricing/Challenge cards with Naira (₦) pricing
+- [x] Feature cards with custom icons (user-provided images)
+- [x] Testimonials section
+- [x] Calculator for profit estimates
+- [x] Payout certificate images (using owner's own certificate image)
+- [x] Footer with social links (Instagram, Discord, X/Twitter, YouTube, WhatsApp)
 
-Search for `noblefundedcheckout.com` in this file. You will find 4 arrays of URLs — one for each account type:
+### 📄 Pages Completed
+- [x] **Home page** (`index.html`) — Fully redesigned
+- [x] **FAQ page** (`faqs.html`) — Updated with Noble Funded Q&As
+- [x] **Trading Rules page** (`rules.html`) — Updated
+- [x] **Affiliate/Referral page** (`affiliate.html`) — Fully redesigned with tier cards
+- [x] **Contact Us page** (`contact-us.html`) — **Fully redesigned** (see details below)
 
-```
-Array 1: Spartan Instant accounts
-  https://noblefundedcheckout.com/product/spartan-instant-1k
-  https://noblefundedcheckout.com/product/spartan-instant-3k
-  https://noblefundedcheckout.com/product/spartan-instant-6k
-  https://noblefundedcheckout.com/product/spartan-instant-15k
-  https://noblefundedcheckout.com/product/spartan-instant-25k
-  https://noblefundedcheckout.com/product/spartan-instant-50k
-  https://noblefundedcheckout.com/product/spartan-instant-100k
+### 🛒 Checkout
+- [x] A separate React checkout app was built and deployed at `checkout.noblefunded.com`
+- [x] "Get Funded" buttons on the home page link directly to the checkout app with the correct currency (`?currency=ngn`) and account size pre-selected
 
-Array 2: Instant accounts
-  https://noblefundedcheckout.com/product/instant-5k
-  https://noblefundedcheckout.com/product/instant-10k
-  ... etc.
-
-Array 3: 1-Step Challenge accounts
-  https://noblefundedcheckout.com/product/1-step-challenge-5k
-  ... etc.
-
-Array 4: 2-Step Challenge accounts
-  https://noblefundedcheckout.com/product/2-step-challenge-5k
-  ... etc.
-```
-
-**To change checkout URLs:** Open the file, find-and-replace each URL with your actual checkout system URL. The order matches the account sizes listed in the pricing table on the website.
-
----
-
-## Dashboard Login Link
-
-The "Log In" button in the navigation header links to:
-
-```
-https://dashboard.noblefunded.com
-```
-
-**Locations:** This link appears in multiple places:
-
-- **`index.html`** line 37 (inside the nav bar HTML) — search for `dashboard.noblefunded.com`
-- **`_next/static/chunks/652-*.js`** — search for `dashboard.noblefunded.com`
-- Also appears in `affiliate.html`, `contact-us.html`, `faqs.html`, `rules.html`
-
-**To change:** Find-and-replace `dashboard.noblefunded.com` with your actual dashboard URL in ALL files:
-
-```bash
-# Quick command to replace across all files:
-find . -type f \( -name "*.html" -o -name "*.js" \) -exec sed -i '' 's|dashboard.noblefunded.com|YOUR-DASHBOARD-URL.com|g' {} +
+### 🔒 Next.js Hydration Fix
+- [x] A special script was added to `contact-us.html` to prevent the old Next.js JavaScript from overwriting the new Contact Us design. **Don't remove it.** It's at the very top of the `<body>` tag and looks like this:
+```html
+<script>
+  // Prevent Next.js from hydrating and overwriting static HTML
+  (function() { ... })();
+</script>
 ```
 
 ---
 
-## Contact Form
+## 📞 The Contact Us Page — What Was Built & What Still Needs Work
 
-The contact form on `contact-us.html` currently uses a **mailto:** link:
+### ✅ What's Done:
+- Beautiful split layout: contact info on the left, message form on the right
+- Contact details showing: Email, Discord, WhatsApp, Telegram, Twitter
+- Form fields: Full Name, Email Address, Subject, Message
+- **Form validation** — if someone leaves a field empty and clicks Send, they get a red shaking error message under that field
+- **Success toast** — after filling everything in and clicking Send, a green "Message Sent! 🎉" pop-up appears at the bottom of the screen
 
+### ❌ What Still Needs to Be Done:
+
+#### 1. Wire up the form to actually send emails
+
+Right now the form shows a success message and opens the user's email app as a fallback (`mailto:`), but it does **not actually send an email to your inbox automatically**. You need to connect a form backend.
+
+**The easiest free solution: [Formspree](https://formspree.io)**
+
+Here's how (explain to a 10-year-old):
+> Imagine the form is a letter. Right now, the letter is written but there's no postman. Formspree is the postman. You sign up, they give you a special address (a form ID), and every time someone fills out your form, Formspree delivers the letter to your email.
+
+**Steps:**
+1. Go to [https://formspree.io](https://formspree.io) and create a free account
+2. Click "New Form" and enter the email you want messages sent to (e.g. `support@noblefunded.com`)
+3. They'll give you a **Form ID** that looks like: `https://formspree.io/f/abcdefgh`
+4. Open `contact-us.html`
+5. Find this line:
+```javascript
+var mailto = 'mailto:support@noblefunded.com'
 ```
-mailto:support@noblefunded.com
-```
-
-**Location:** `_next/static/chunks/652-*.js` — search for `mailto:support@noblefunded.com`
-
-The form constructs a mailto: link with the subject and body fields. To connect it to a real backend API:
-
-### Option A: Keep mailto (simplest)
-
-Just update the email address:
-
-```bash
-find . -type f \( -name "*.html" -o -name "*.js" \) -exec sed -i '' 's|support@noblefunded.com|YOUR-EMAIL@yourdomain.com|g' {} +
-```
-
-### Option B: Connect to Backend API
-
-To replace the mailto with an actual form submission, find this section in `652-*.js`:
+6. Replace the whole `setTimeout` block that builds the mailto link with a `fetch` call to Formspree like this:
 
 ```javascript
-// Search for: "mailto:support@noblefunded.com"
-// You'll find a form onSubmit handler that creates a mailto link
-```
-
-Replace the `window.location.href=a` (mailto redirect) with a `fetch()` call to your backend:
-
-```javascript
-fetch('https://your-api.com/contact', {
+// Replace the setTimeout block with this:
+fetch('https://formspree.io/f/YOUR-FORM-ID', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ name: e.name, email: e.email, subject: e.subject, message: e.message })
+  body: JSON.stringify({
+    name: nameInput.value,
+    email: emailInput.value,
+    subject: subjectInput.value,
+    message: msgInput.value
+  })
 })
+.then(function(res) {
+  btn.classList.remove('loading');
+  btn.textContent = origText;
+  form.reset();
+  var toast = document.getElementById('contact-success-toast');
+  if (toast) {
+    toast.classList.add('show');
+    setTimeout(function() { toast.classList.remove('show'); }, 4500);
+  }
+})
+.catch(function() {
+  btn.classList.remove('loading');
+  btn.textContent = origText;
+  alert('Something went wrong. Please email us directly at support@noblefunded.com');
+});
 ```
 
 ---
 
-## Pricing Configuration
+## 🔐 Login & Sign Up — What Needs To Be Done
 
-All pricing data is in **one file**: `_next/static/chunks/652-8c1b25fb4aeaa8fd.js`
+Right now the "Log In" and "Sign Up" buttons in the header link to:
+- **Log In** → `https://dashboard.noblefunded.com`
+- **Sign Up** → Same URL
 
-### Account Sizes
+These are external links to whatever dashboard system Noble Funded uses (likely a third-party prop trading dashboard or a custom backend).
 
-Search for the arrays that contain `"$1K"`, `"$3K"`, etc:
+### If you are building your own dashboard:
+1. Build your login/register pages (separate app or same site)
+2. Open ALL these HTML files: `index.html`, `contact-us.html`, `faqs.html`, `rules.html`, `affiliate.html`
+3. In each file, search for `dashboard.noblefunded.com` and replace it with your login URL
+4. Search for the "Sign Up" button — currently it has no separate URL — and add your registration URL
 
-```javascript
-// Spartan sizes:     ["$1K","$3K","$6K","$15K","$25K","$50K","$100K"]
-// Instant sizes:     ["$5K","$10K","$15K","$25K","$50K","$100K"]
-// 1-Step sizes:      ["$5K","$10k","$25K","$50K","$100K","$200K"]
-// 2-Step sizes:      ["$5K","$10k","$25K","$50K","$100K","$200K"]
+**Quick command to update all files at once:**
+```bash
+# Replace login URL in all HTML files at once:
+find . -name "*.html" -exec sed -i '' 's|dashboard.noblefunded.com|YOUR-LOGIN-URL.com|g' {} +
 ```
 
-### Prices (Original / Discounted)
+### If you are using a third-party dashboard (e.g. Match-Trader, TradeLocker, MyFXbook):
+- Just update the URL above to point to wherever traders log in
+- You don't need to build anything — just update the link
 
-Search for the price arrays. There are two sets:
+---
 
-**Original prices (shown with strikethrough):**
+## 🖼️ How To Update Images
 
-```javascript
-["$17","$39","$75","$112","$159","$225","$419"]   // Spartan
-["$119","$178","$204","$319","$497","$897"]        // Instant
-["$67","$119","$219","$340","$619","$847"]          // 1-Step
-["$54","$99","$197","$319","$599","$793"]           // 2-Step
-```
+> Think of it like swapping a picture in a picture frame. The frame stays the same. You just need to put in a new picture with the same size.
 
-**Discounted prices (shown as main price):**
+All images live in the `images/` folder. To replace one:
+1. Get your new image ready
+2. Name it **exactly the same** as the old one
+3. Drop it into the `images/` folder, overwriting the old file
+4. That's it — the site will automatically use the new image
 
-```javascript
-["$9","$21","$49","$86","$99","$159","$209"]       // Spartan
-["$119","$178","$204","$319","$497","$897"]         // Instant
-["$67","$119","$219","$340","$619","$847"]          // 1-Step
-["$54","$99","$197","$319","$599","$793"]           // 2-Step
-```
+**Key images:**
 
-### Profit Targets (Spartan)
+| File | Where It Appears |
+|---|---|
+| `images/logo.svg` | Top left of every page (header) + footer |
+| `images/NB bg.webm` | The background video on the home page hero |
+| `images/fast.png` | Feature card icon |
+| `images/spilt.png` | Feature card icon |
+| `images/step.png` | Feature card icon |
+| `images/news.png` | Feature card icon |
+| `images/target.png` | Feature card icon |
+| `images/payouts/*.jpg` | The scrolling payout certificates |
+| `images/lastsectiob3.png` | "Ready to Elevate Your Trading?" background |
 
-Search for the array:
+---
 
-```javascript
-["$100","$240","$480","$960","$2000","$4500","$8500"]
-```
+## 💬 How To Change Text Content
 
-### Trading Rules Values
+Most text is directly in the `.html` files. Open the file in a code editor, use **Ctrl+F** (or Cmd+F on Mac) to search for the text you want to change, then type the new text.
 
-The challenge rules (drawdown %, profit targets, etc.) are rendered via conditional logic in the same JS file. Search for strings like `"6%"`, `"5%"`, `"3%"`, `"12%"`, `"80%"`, `"90%"` near the pricing section.
+**Examples:**
 
-### Promo Code
+| What to change | Search for |
+|---|---|
+| Support email | `support@noblefunded.com` |
+| WhatsApp number | `2349070552755` |
+| Promo code in banner | `NOBLE25` |
+| Company name in footer | `Noble Funded Ltd` |
+| Discord link | `discord.gg/ScpkyxPec9` |
+| Telegram handle | `@noblefunded` |
+| Twitter/X handle | `x.com/noblefunded` |
 
-The header banner shows `Code: NOBLE40`. To change it, search for `NOBLE40` in ALL HTML files:
+---
+
+## 📦 How To Deploy Changes
+
+This site auto-deploys when you push to GitHub. The process is simple:
 
 ```bash
-find . -name "*.html" -exec sed -i '' 's|NOBLE40|YOUR-NEW-CODE|g' {} +
+# Step 1: Add your changed files
+git add .
+
+# Step 2: Write a short message describing what you changed
+git commit -m "describe what you changed here"
+
+# Step 3: Push to GitHub (Vercel will pick it up automatically)
+git push
 ```
 
----
-
-## Changing Text Content
-
-### In HTML files (header/footer text, meta tags)
-
-Open the relevant `.html` file and edit the text directly. For example:
-
-- **Page title:** Search for `<title>` tag
-- **Meta description:** Search for `<meta name="description"`
-- **Footer text:** Search for `Noble Markets Ltd`
-- **Support email:** Search for `support@noblefunded.com`
-
-### In JS chunks (dynamic content)
-
-FAQ answers, testimonials, feature descriptions, etc. are in `_next/static/chunks/652-*.js`. Open this file and search for the text you want to change.
-
-**⚠️ When editing JS files:**
-
-- Do NOT add line breaks inside strings
-- Do NOT change quotes style (keep `\"` escaped quotes exactly as-is)
-- Do NOT delete commas, brackets, or parentheses
-- Test the site immediately after any change
+Wait about 1-2 minutes after pushing, then check your Vercel dashboard or visit the live site to confirm the changes went through.
 
 ---
 
-## Changing Images
+## 🔴 Things That Are NOT Done Yet (Owner Hasn't Asked For These)
 
-### Simple Replacement
+These are things that may be needed in the future but have not been requested or built yet:
 
-To replace an image, simply overwrite the file in `/images/` with a new file using the **exact same filename**:
+- [ ] **Real form email delivery** — The contact form needs Formspree or similar (see above)
+- [ ] **Login/Signup pages** — Depends on dashboard choice (see above)
+- [ ] **Blog / Journal page** — Not built
+- [ ] **Google Analytics** — No analytics is set up. See the existing README for how to add it.
+- [ ] **Facebook Pixel** — Not installed. See existing README.
+- [ ] **Intercom / Live Chat** — Not installed. See existing README.
+- [ ] **Giveaway popup** — There's a popup in the home page JS that used to collect emails. It no longer works. The owner hasn't asked to fix it yet.
+- [ ] **Payout certificate images** — The images in `/images/payouts/` may still show old branding. Check them and replace if needed.
+- [ ] **Documents folder** — The footer links to Terms & Conditions, Privacy Policy, Trading Rules, and KYC Policy PDFs. Make sure these PDFs exist in the `/documents/` folder.
 
+---
+
+## ⚠️ Very Important Rules — Do Not Break These
+
+1. **Never edit anything inside `_next/static/`** unless you really know what you're doing. This is compiled code and is extremely fragile.
+
+2. **The `contact-us.html` has a hydration blocker** at the top of the `<body>`. Do NOT delete it or the new contact page design will disappear and the old one will come back.
+
+3. **Always test locally before pushing.** Run a local server like this:
 ```bash
-# Example: Replace the logo
-cp /path/to/new-logo.svg images/logo.svg
-
-# Example: Replace hero video
-cp /path/to/new-video.webm "images/NB bg.webm"
+python3 -m http.server 3000
+# Then open http://localhost:3000/index.html in your browser
 ```
 
-### Image Reference
-
-| Image | Location | Used For |
-|---|---|---|
-| `images/logo.svg` | Header & Footer | Site logo |
-| `images/NB bg.webm` | Hero section | Background video |
-| `images/section.webp` | — | Old section background (replaced) |
-| `images/sectiob3.png` | "Join thousands" section | Background image |
-| `images/platform.webp` | — | Old platform image (replaced) |
-| `images/Stars.png` | "How it Works" section | Step illustration |
-| `images/top-rated/BG Sec.png` | "#1 Fastest Growing" section | Card backgrounds |
-| `images/payouts/*.jpg` | Payout ticker | Payout certificates |
-| `images/hero/*.png` | Hero section | Payment method icons |
-| `images/about/*.svg` | Feature cards | Feature icons |
-| `images/gift.png` | Popup | Promotional popup image |
-
-### ⚠️ Payout Certificate Images
-
-The payout certificate images in `images/payouts/` still display **the old** branding because they are raster images with baked-in text. These need to be replaced with Noble Funded branded certificates using Photoshop or similar.
-
----
-
-## Adding Your Own Tracking/Analytics
-
-All previous third-party tracking (Facebook Pixel, Intercom, TrackDesk, Google Ads) has been removed. To add your own:
-
-### Google Analytics / Tag Manager
-
-Add this just before `</head>` in ALL 5 HTML files:
-
-```html
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX');
-</script>
-```
-
-### Facebook Pixel
-
-Add this just before `</head>` in ALL 5 HTML files:
-
-```html
-<script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', 'YOUR-PIXEL-ID');
-  fbq('track', 'PageView');
-</script>
-```
-
-### Intercom / Live Chat
-
-Add this just before `</body>` in ALL 5 HTML files:
-
-```html
-<script>
-  window.intercomSettings = {
-    api_base: "https://api-iam.intercom.io",
-    app_id: "YOUR-APP-ID"
-  };
-</script>
-<script>(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',w.intercomSettings);}else{var d=document;var i=function(){i.c(arguments);};i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;var l=function(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/YOUR-APP-ID';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};if(document.readyState==='complete'){l();}else if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();</script>
-```
-
----
-
-## Color Palette Reference
-
-| Color | Hex Code | Usage |
-|---|---|---|
-| Dark Teal (Primary) | `#002B36` | Backgrounds, cards, footer |
-| Mid Teal (Secondary) | `#14655B` | Borders, secondary elements |
-| Mint (Accent) | `#A7FFEB` | Buttons, highlights, gradients |
-| White | `#FFFFFF` | Primary text |
-| White/50 | `rgba(255,255,255,0.5)` | Secondary text |
-| Muted Teal | `#5E8A84` | Muted text in pricing cards |
-
----
-
-## Known Limitations
-
-1. **Not a standard Next.js project** — There is no `package.json` or React source code. This is pre-compiled static output. You cannot run `npm install` or `npm run build`.
-
-2. **Minified JavaScript** — The JS in `_next/static/chunks/` is minified and bundled. Editing requires care. Always test after changes.
-
-3. **React hydration** — The site uses React hydration (JS takes over the HTML after page load). If the HTML and JS content don't match, React may "flash" old content. Always match changes in BOTH the HTML and the JS file.
-
-4. **Payout certificates** — The images in `/images/payouts/` still show the old text. These are raster JPG images and need manual replacement with new Noble Funded branded certificates.
-
-5. **Documents folder** — The `/documents/` folder should contain `tnc.pdf`, `privacy.pdf`, `aml.pdf`, `prohibited.pdf`. If these are missing, create and add them.
-
-6. **Giveaway popup** — A promotional popup appears 10 seconds after page load (GET 10% OFF). It sends an email to a server action that no longer works. To disable it, search for `setTimeout` and `10e3` (10000ms) in `652-*.js`.
-
----
-
-## Quick Reference Commands
-
+4. **Commit your work before making big changes.** That way if something breaks, you can go back:
 ```bash
-# Replace checkout domain across all files
-find . -type f \( -name "*.html" -o -name "*.js" \) -exec sed -i '' 's|noblefundedcheckout.com|YOUR-CHECKOUT-DOMAIN.com|g' {} +
-
-# Replace dashboard domain across all files
-find . -type f \( -name "*.html" -o -name "*.js" \) -exec sed -i '' 's|dashboard.noblefunded.com|YOUR-DASHBOARD.com|g' {} +
-
-# Replace support email across all files
-find . -type f \( -name "*.html" -o -name "*.js" \) -exec sed -i '' 's|support@noblefunded.com|YOUR-EMAIL@domain.com|g' {} +
-
-# Replace promo code across all files
-find . -name "*.html" -exec sed -i '' 's|NOBLE40|YOUR-CODE|g' {} +
-
-# Run local preview server
-npx -y serve -l 3000 .
+git checkout -- contact-us.html   # undo changes to one file
+git checkout -- .                  # undo ALL uncommitted changes
 ```
+
+5. **The site uses Tailwind CSS classes** (like `flex`, `text-white`, `bg-[#002B36]`). These styles come from a precompiled CSS file. You can add custom inline styles (e.g. `style="color:red"`) but don't try to add new Tailwind classes that aren't already in the CSS — they won't work.
 
 ---
 
-## Need Help?
+## 🌐 Useful Links
 
-If something breaks after editing, use `git diff` to see what changed and `git checkout -- <file>` to undo the change. Always commit your work before making new edits.
+| Link | What It Is |
+|---|---|
+| [https://noblefunded.com](https://noblefunded.com) | Live website |
+| [https://dashboard.noblefunded.com](https://dashboard.noblefunded.com) | Trader dashboard (external) |
+| [https://checkout.noblefunded.com](https://checkout.noblefunded.com) | Checkout app (separate Vercel project) |
+| [https://github.com/Damcheck/Noble-Frontend](https://github.com/Damcheck/Noble-Frontend) | GitHub repo for this site |
+| [https://formspree.io](https://formspree.io) | Recommended contact form backend |
 
-```bash
-# See what changed
-git diff
+---
 
-# Undo all uncommitted changes
-git checkout -- .
+## 🆘 If Something Breaks
 
-# Undo a specific file
-git checkout -- index.html
-```
+1. Check what you last changed: `git diff`
+2. Undo the last commit: `git revert HEAD`
+3. Or restore a specific file: `git checkout -- filename.html`
+4. Open the file in a browser locally first **before pushing** to make sure it looks right
+
+---
+
+*Last updated: March 2026 | Built with ❤️ for Noble Funded*
