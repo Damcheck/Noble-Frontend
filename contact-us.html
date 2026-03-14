@@ -64,6 +64,30 @@ img[src*="about/"][src$=".webp"] {
         display: none !important;
     }
 </style>
+<style id="mobile-nav-fix">
+  /* Force desktop nav hidden on mobile - beats inline styles from JS */
+  @media (max-width: 767px) {
+    header .z-\[10\].md\:flex.hidden,
+    header [class*="md:flex"][class*="hidden"] {
+      display: none !important;
+    }
+  }
+  /* Ensure hamburger menu always visible on mobile */
+  @media (max-width: 767px) {
+    header .md\:hidden {
+      display: flex !important;
+    }
+  }
+  /* Ensure desktop nav always visible on desktop */
+  @media (min-width: 768px) {
+    header .md\:hidden {
+      display: none !important;
+    }
+    header .z-\[10\].md\:flex.hidden {
+      display: flex !important;
+    }
+  }
+</style>
 </head><body class="__variable_2ca027 antialiased"><script>
   // Prevent Next.js from hydrating and overwriting static HTML
   (function() {
@@ -688,10 +712,6 @@ iframe[name="intercom-launcher-frame"], .intercom-namespace,
 
                     if (!isFooter) {
                         if (login.parentElement) {
-                            login.parentElement.style.display = 'flex';
-                            login.parentElement.style.flexDirection = 'row';
-                            login.parentElement.style.alignItems = 'center';
-                            login.parentElement.style.gap = '20px';
                             login.parentNode.insertBefore(signup, login.nextSibling);
                         }
                     } else {
