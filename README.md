@@ -1,5 +1,9 @@
 # 🚀 Noble Funded — Developer Handover Guide
 
+> ⚠️ **IMPORTANT — READ BEFORE TOUCHING ANYTHING**
+> This site is already deployed and live on Vercel. Every `git push` to `main` auto-deploys. Be careful.
+
+
 > **Read this whole thing before you touch anything.** It will save you hours of confusion.
 
 ---
@@ -226,19 +230,24 @@ Wait about 1-2 minutes after pushing, then check your Vercel dashboard or visit 
 
 ---
 
-## 🔴 Things That Are NOT Done Yet (Owner Hasn't Asked For These)
+## 🛠️ Developer Task List — Your Responsibilities
 
-These are things that may be needed in the future but have not been requested or built yet:
+These are the only things left for the developer to handle:
 
-- [ ] **Real form email delivery** — The contact form needs Formspree or similar (see above)
-- [ ] **Login/Signup pages** — Depends on dashboard choice (see above)
-- [ ] **Blog / Journal page** — Not built
-- [ ] **Google Analytics** — No analytics is set up. See the existing README for how to add it.
-- [ ] **Facebook Pixel** — Not installed. See existing README.
-- [ ] **Intercom / Live Chat** — Not installed. See existing README.
-- [ ] **Giveaway popup** — There's a popup in the home page JS that used to collect emails. It no longer works. The owner hasn't asked to fix it yet.
-- [ ] **Payout certificate images** — The images in `/images/payouts/` may still show old branding. Check them and replace if needed.
-- [ ] **Documents folder** — The footer links to Terms & Conditions, Privacy Policy, Trading Rules, and KYC Policy PDFs. Make sure these PDFs exist in the `/documents/` folder.
+- [ ] **Wire up the contact form** — Connect to Formspree or your preferred email backend. Full instructions are in the "Contact Us Page" section above.
+- [ ] **Fix the mobile hamburger menu** — The menu icon (≡) shows on mobile but doesn't open a dropdown. The menu toggle JS is blocked by the Next.js hydration fix. You need to add a vanilla JS toggle that shows/hides a mobile nav panel when the hamburger is tapped.
+- [ ] **Link the Sign Up button** — Currently goes to same URL as Log In. Update it to point to your registration page. Search for `injected-signup` in the HTML files to find where it's injected.
+- [ ] **Add Analytics** — Google Analytics, Facebook Pixel, etc. Instructions are in the sections below.
+
+## ✅ Things That Are Already Handled — Don't Touch
+
+- [x] **Documents** — Footer PDF links (Terms, Privacy, KYC, etc.) are working
+- [x] **Giveaway popup** — The broken email-collection popup has been disabled and removed
+- [x] **Mobile header** — Fixed. Shows logo + hamburger only on mobile
+- [x] **All 5 pages** — Fully designed and deployed
+- [x] **Checkout flow** — All "Get Funded" buttons work correctly
+- [x] **Contact page form** — Validation and success UI are built; just needs backend connection
+
 
 ---
 
