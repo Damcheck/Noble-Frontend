@@ -172,6 +172,85 @@ img[src*="about/"][src$=".webp"] {
     background: linear-gradient(90deg, transparent, rgba(167,255,235,0.2), transparent);
     margin: 8px 0;
   }
+
+  /* --- Form Validation Styles --- */
+  .contact-input.input-error {
+    border-color: rgba(255, 100, 100, 0.7) !important;
+    background: rgba(255, 50, 50, 0.05) !important;
+    box-shadow: 0 0 0 3px rgba(255, 80, 80, 0.1) !important;
+    animation: shake 0.35s ease;
+  }
+  .field-error-msg {
+    font-size: 11px;
+    color: rgba(255,120,120,0.9);
+    margin-top: 4px;
+    display: none;
+  }
+  .field-error-msg.show { display: block; }
+  @keyframes shake {
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-6px)}
+    40%{transform:translateX(6px)}
+    60%{transform:translateX(-4px)}
+    80%{transform:translateX(4px)}
+  }
+  /* Success Toast */
+  #contact-success-toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(120px);
+    background: linear-gradient(135deg, #002B36, #0d3d30);
+    border: 1px solid rgba(167,255,235,0.35);
+    border-radius: 20px;
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    z-index: 9999;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(167,255,235,0.1);
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s ease;
+    opacity: 0;
+    pointer-events: none;
+    min-width: 320px;
+  }
+  #contact-success-toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .toast-icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #A7FFEB, #14655B);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    animation: popIn 0.4s ease 0.2s both;
+  }
+  @keyframes popIn {
+    0%{transform:scale(0)}50%{transform:scale(1.15)}100%{transform:scale(1)}
+  }
+  .toast-text-title { font-size: 15px; font-weight: 700; color: #A7FFEB; }
+  .toast-text-sub { font-size: 13px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+  /* Button loading state */
+  .contact-submit-btn.loading {
+    opacity: 0.7;
+    pointer-events: none;
+    position: relative;
+  }
+  .contact-submit-btn.loading::after {
+    content: '';
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid rgba(0,43,54,0.4);
+    border-top-color: #002B36;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
 </style>
 
 <div class="container mx-auto px-5 relative" style="padding-top:60px;padding-bottom:80px;">
@@ -812,5 +891,117 @@ a[href*="/affiliate"], a[href*="Referral Program"] {
 }
 </style>
 
+
+
+<div id="contact-success-toast">
+  <div class="toast-icon">
+    <svg width="22" height="22" fill="none" stroke="#002B36" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+  </div>
+  <div>
+    <div class="toast-text-title">Message Sent! 🎉</div>
+    <div class="toast-text-sub">We'll get back to you within 12 hours.</div>
+  </div>
+</div>
+
+<script>
+(function() {
+  function initContactForm() {
+    var form = document.querySelector('.contact-form-card form');
+    if (!form) return;
+
+    // Add IDs & error message spans to each field
+    var nameInput   = form.querySelector('input[type="text"]:not([placeholder*="about"])');
+    var emailInput  = form.querySelector('input[type="email"]');
+    var subjectInput= form.querySelector('input[placeholder*="about"]');
+    var msgInput    = form.querySelector('textarea');
+    var btn         = form.querySelector('.contact-submit-btn');
+
+    function addError(input, msg) {
+      var wrap = input.parentElement;
+      var err = wrap.querySelector('.field-error-msg');
+      if (!err) {
+        err = document.createElement('span');
+        err.className = 'field-error-msg';
+        wrap.appendChild(err);
+      }
+      err.textContent = msg;
+      err.classList.add('show');
+      input.classList.add('input-error');
+      // Clear error on focus
+      input.addEventListener('focus', function() {
+        input.classList.remove('input-error');
+        err.classList.remove('show');
+      }, { once: true });
+    }
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var valid = true;
+
+      [nameInput, emailInput, subjectInput, msgInput].forEach(function(inp) {
+        inp.classList.remove('input-error');
+        var err = inp.parentElement.querySelector('.field-error-msg');
+        if (err) err.classList.remove('show');
+      });
+
+      if (!nameInput || !nameInput.value.trim()) {
+        addError(nameInput, 'Please enter your full name.');
+        valid = false;
+      }
+      if (!emailInput || !emailInput.value.trim()) {
+        addError(emailInput, 'Please enter your email address.');
+        valid = false;
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
+        addError(emailInput, 'Please enter a valid email address.');
+        valid = false;
+      }
+      if (!subjectInput || !subjectInput.value.trim()) {
+        addError(subjectInput, 'Please enter a subject.');
+        valid = false;
+      }
+      if (!msgInput || !msgInput.value.trim()) {
+        addError(msgInput, 'Please write a message before sending.');
+        valid = false;
+      }
+
+      if (!valid) return;
+
+      // Show loading state
+      var origText = btn.textContent;
+      btn.classList.add('loading');
+      btn.textContent = 'Sending...';
+
+      // Simulate send (mailto fallback) - after 1.5s show success
+      setTimeout(function() {
+        btn.classList.remove('loading');
+        btn.textContent = origText;
+        // Reset form
+        form.reset();
+        // Show success toast
+        var toast = document.getElementById('contact-success-toast');
+        if (toast) {
+          toast.classList.add('show');
+          setTimeout(function() { toast.classList.remove('show'); }, 4500);
+        }
+        // Open mailto as actual send mechanism
+        var name    = nameInput.value;
+        var email   = emailInput.value;
+        var subject = subjectInput.value;
+        var msg     = msgInput.value;
+        var mailto  = 'mailto:support@noblefunded.com'
+          + '?subject=' + encodeURIComponent('[Noble Funded Contact] ' + subject)
+          + '&body=' + encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + msg);
+        window.location.href = mailto;
+      }, 1500);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initContactForm);
+  } else {
+    initContactForm();
+  }
+})();
+</script>
 
 </body></html>
