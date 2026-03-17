@@ -862,4 +862,68 @@ a[href*="/affiliate"], a[href*="Referral Program"] {
 
 
 
-</body></html>
+
+<!-- Anti-404 MutationObserver -->
+<script>
+(function() {
+    // Escaped HTML payloads
+    const cardsText = [
+        `<div class="break-inside-avoid rounded-xl bg-[#002B36] text-white p-2"><div class="relative rounded-xl overflow-hidden aspect-[9/12] bg-black/40 mb-4"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" class="w-full h-full object-cover" src="embed/lnq29XE2RIE.html"></iframe></div></div><div class="break-inside-avoid rounded-xl bg-[#002B36] text-white p-2"><div class="p-2 h-full min-h-fulls min-h-[250px]"><div class="text-lg font-semibold">From Side Hustle to Full-Time Trader</div><p class="text-sm text-[#A7FFEB] mt-2">I was running a small phone accessories business in Lagos when a friend told me about Noble Funded. I paid ₦25,000 for the $10K challenge, passed in two weeks, and got my first payout of ₦380,000. Now I trade full-time and my family is proud.</p><div class="flex items-center gap-3 pt-4"><div class="size-10 bg-white rounded-full"></div><div><div class="text-[#A7FFEB] font-semibold">Chinedu O.</div><div class="text-[#A7FFEB] text-sm">Gold Scalper</div></div></div></div></div><div class="break-inside-avoid rounded-xl bg-[#002B36] text-white p-2"><div class="p-2 h-full min-h-fulls min-h-[250px]"><div class="text-lg font-semibold">Funded When I Had Nothing</div><p class="text-sm text-[#A7FFEB] mt-2">Other prop firms wanted ₦100,000+ just to start. Noble Funded let me in for ₦15,000. I passed the challenge trading XAUUSD and got funded. My first month's profit was more than my old salary. This is the opportunity Nigeria needed.</p><div class="flex items-center gap-3 pt-4"><div class="size-10 bg-white rounded-full"></div><div><div class="text-[#A7FFEB] font-semibold">Amina B.</div><div class="text-[#A7FFEB] text-sm">Forex Swing Trader</div></div></div>`,
+        `<div class="break-inside-avoid rounded-xl bg-[#002B36] text-white p-2"><div class="relative rounded-xl overflow-hidden aspect-[9/12] bg-black/40 mb-4"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" class="w-full h-full object-cover" src="embed/lnq29XE2RIE.html"></iframe></div></div><div class="break-inside-avoid rounded-xl bg-[#002B36] text-white p-2"><div class="p-2 h-full min-h-fulls min-h-[250px]"><div class="text-lg font-semibold">From Side Hustle to Full-Time Trader</div><p class="text-sm text-[#A7FFEB] mt-2">I was running a small phone accessories business in Lagos when a friend told me about Noble Funded. I paid ₦25,000 for the $10K challenge, passed in two weeks, and got my first payout of ₦380,000. Now I trade full-time and my family is proud.</p><div class="flex items-center gap-3 pt-4"><div class="size-10 bg-white rounded-full"></div><div><div class="text-[#A7FFEB] font-semibold">Chinedu O.</div><div class="text-[#A7FFEB] text-sm">Gold Scalper</div></div></div>`,
+        `<div class="break-inside-avoid rounded-xl bg-[#002B36] text-white p-2"><div class="relative rounded-xl overflow-hidden aspect-[9/12] bg-black/40 mb-4"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" class="w-full h-full object-cover" src="embed/lnq29XE2RIE.html"></iframe></div></div><div class="break-inside-avoid rounded-xl bg-[#002B36] text-white p-2"><div class="p-2 h-full min-h-fulls min-h-[250px]"><div class="text-lg font-semibold">From Side Hustle to Full-Time Trader</div><p class="text-sm text-[#A7FFEB] mt-2">I was running a small phone accessories business in Lagos when a friend told me about Noble Funded. I paid ₦25,000 for the $10K challenge, passed in two weeks, and got my first payout of ₦380,000. Now I trade full-time and my family is proud.</p><div class="flex items-center gap-3 pt-4"><div class="size-10 bg-white rounded-full"></div><div><div class="text-[#A7FFEB] font-semibold">Chinedu O.</div><div class="text-[#A7FFEB] text-sm">Gold Scalper</div></div></div></div></div><div class="break-inside-avoid rounded-xl bg-[#002B36] text-white p-2"><div class="p-2 h-full min-h-fulls min-h-[250px]"><div class="text-lg font-semibold">Funded When I Had Nothing</div><p class="text-sm text-[#A7FFEB] mt-2">Other prop firms wanted ₦100,000+ just to start. Noble Funded let me in for ₦15,000. I passed the challenge trading XAUUSD and got funded. My first month's profit was more than my old salary. This is the opportunity Nigeria needed.</p><div class="flex items-center gap-3 pt-4"><div class="size-10 bg-white rounded-full"></div><div><div class="text-[#A7FFEB] font-semibold">Amina B.</div><div class="text-[#A7FFEB] text-sm">Forex Swing Trader</div></div></div></div></div><div class="break-inside-avoid rounded-xl bg-[#002B36] text-white p-2"><div class="relative rounded-xl overflow-hidden aspect-[9/12] bg-black/40 mb-4"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" class="w-full h-full object-cover" src="embed/Mg2wW9TIQuk.html"></iframe></div></div><div class="break-inside-avoid rounded-xl bg-[#002B36] text-white p-2"><div class="relative rounded-xl overflow-hidden aspect-[9/12] bg-black/40 mb-4"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" class="w-full h-full object-cover" src="embed/Nbw-terhXwg.html"></iframe></div></div><div class="break-inside-avoid rounded-xl bg-[#002B36] text-white p-2"><div class="p-2 h-full min-h-fulls min-h-[250px]"><div class="text-lg font-semibold">The EA Trader Who Found His Firm</div><p class="text-sm text-[#A7FFEB] mt-2">Most prop firms ban EAs or make it nearly impossible. Noble Funded lets me run my Expert Advisor freely. I coded my own strategy, passed the challenge on autopilot, and now I earn passive income. No restrictions, no drama.</p><div class="flex items-center gap-3 pt-4"><div class="size-10 bg-white rounded-full"></div><div><div class="text-[#A7FFEB] font-semibold">Tunde A.</div><div class="text-[#A7FFEB] text-sm">Algo Trader</div></div></div>`,
+        `<div class="break-inside-avoid rounded-xl bg-[#002B36] text-white p-2"><div class="relative rounded-xl overflow-hidden aspect-[9/12] bg-black/40 mb-4"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" class="w-full h-full object-cover" src="embed/lnq29XE2RIE.html"></iframe></div></div><div class="break-inside-avoid rounded-xl bg-[#002B36] text-white p-2"><div class="p-2 h-full min-h-fulls min-h-[250px]"><div class="text-lg font-semibold">From Side Hustle to Full-Time Trader</div><p class="text-sm text-[#A7FFEB] mt-2">I was running a small phone accessories business in Lagos when a friend told me about Noble Funded. I paid ₦25,000 for the $10K challenge, passed in two weeks, and got my first payout of ₦380,000. Now I trade full-time and my family is proud.</p><div class="flex items-center gap-3 pt-4"><div class="size-10 bg-white rounded-full"></div><div><div class="text-[#A7FFEB] font-semibold">Chinedu O.</div><div class="text-[#A7FFEB] text-sm">Gold Scalper</div></div></div></div></div><div class="break-inside-avoid rounded-xl bg-[#002B36] text-white p-2"><div class="p-2 h-full min-h-fulls min-h-[250px]"><div class="text-lg font-semibold">Funded When I Had Nothing</div><p class="text-sm text-[#A7FFEB] mt-2">Other prop firms wanted ₦100,000+ just to start. Noble Funded let me in for ₦15,000. I passed the challenge trading XAUUSD and got funded. My first month's profit was more than my old salary. This is the opportunity Nigeria needed.</p><div class="flex items-center gap-3 pt-4"><div class="size-10 bg-white rounded-full"></div><div><div class="text-[#A7FFEB] font-semibold">Amina B.</div><div class="text-[#A7FFEB] text-sm">Forex Swing Trader</div></div></div></div></div><div class="break-inside-avoid rounded-xl bg-[#002B36] text-white p-2"><div class="relative rounded-xl overflow-hidden aspect-[9/12] bg-black/40 mb-4"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" class="w-full h-full object-cover" src="embed/Mg2wW9TIQuk.html"></iframe></div></div><div class="break-inside-avoid rounded-xl bg-[#002B36] text-white p-2"><div class="relative rounded-xl overflow-hidden aspect-[9/12] bg-black/40 mb-4"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" class="w-full h-full object-cover" src="embed/Nbw-terhXwg.html"></iframe></div></div><div class="break-inside-avoid rounded-xl bg-[#002B36] text-white p-2"><div class="p-2 h-full min-h-fulls min-h-[250px]"><div class="text-lg font-semibold">The EA Trader Who Found His Firm</div><p class="text-sm text-[#A7FFEB] mt-2">Most prop firms ban EAs or make it nearly impossible. Noble Funded lets me run my Expert Advisor freely. I coded my own strategy, passed the challenge on autopilot, and now I earn passive income. No restrictions, no drama.</p><div class="flex items-center gap-3 pt-4"><div class="size-10 bg-white rounded-full"></div><div><div class="text-[#A7FFEB] font-semibold">Tunde A.</div><div class="text-[#A7FFEB] text-sm">Algo Trader</div></div></div></div></div><div class="break-inside-avoid rounded-xl bg-[#002B36] text-white p-2"><div class="p-2 h-full min-h-fulls min-h-[250px]"><div class="text-lg font-semibold">From University Student to Funded Trader</div><p class="text-sm text-[#A7FFEB] mt-2">I'm a 300-level student at UNILAG. I saved up ₦15,000 from my allowance, bought the smallest challenge, and passed it during exam break. Now I'm funding my own education. Noble Funded changed my perspective completely.</p><div class="flex items-center gap-3 pt-4"><div class="size-10 bg-white rounded-full"></div><div><div class="text-[#A7FFEB] font-semibold">Ngozi E.</div><div class="text-[#A7FFEB] text-sm">Part-Time Trader</div></div></div>`
+    ];
+    let patched = 0;
+    
+    function fixCards() {
+        const errors = Array.from(document.querySelectorAll('div')).filter(el => el.textContent.includes('404: NOT_FOUND'));
+        if (errors.length > 0) {
+             errors.forEach((el, idx) => {
+                 let wrapper = el;
+                 // Traverse up to find the background container
+                 while(wrapper && typeof wrapper.className === "string") {
+                     if (wrapper.className.includes('bg-[#002B36]') || wrapper.className.includes('break-inside-avoid')) {
+                         break;
+                     }
+                     wrapper = wrapper.parentElement;
+                 }
+                 
+                 // Fallback if we didn't hit the specific class wrapper
+                 if (!wrapper || !wrapper.className) wrapper = el.parentElement || el;
+                 
+                 // Just inject the pristine HTML into the container's parent
+                 let finalContainer = wrapper.parentElement;
+                 if (finalContainer && cardsText[patched]) {
+                     wrapper.outerHTML = cardsText[patched];
+                     patched++;
+                 }
+             });
+        }
+    }
+    
+    // Watch for React hydration
+    const observer = new MutationObserver((mutations) => {
+        for (let mut of mutations) {
+            if (mut.addedNodes.length > 0) fixCards();
+        }
+        if (patched >= 4) observer.disconnect();
+    });
+    
+    if (document.body) {
+        observer.observe(document.body, { childList: true, subtree: true });
+    } else {
+        document.addEventListener("DOMContentLoaded", () => {
+            observer.observe(document.body, { childList: true, subtree: true });
+            fixCards();
+        });
+    }
+    
+    // Failsafe timer
+    const iv = setInterval(() => {
+        fixCards();
+        if (patched >= 4) clearInterval(iv);
+    }, 300);
+    setTimeout(() => clearInterval(iv), 8000);
+})();
+</script>
+\n</body></html>
